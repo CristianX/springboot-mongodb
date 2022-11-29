@@ -48,4 +48,10 @@ public class PersonaController {
         personaService.save(persona);
     }
 
+    @PostMapping("/pruebaCedula")
+    public Object buscarPersona(){
+        var documentPersona = personaService.obtenerDatosWSPersonas("1804778023");
+        return documentPersona;
+    }
+
 }

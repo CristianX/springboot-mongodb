@@ -24,8 +24,9 @@ public class PersonaController {
     private final PersonaService personaService;
 
     @PostMapping("/personas")
-    public void save(@RequestBody Persona persona) {
+    public Persona save(@RequestBody Persona persona) {
         personaService.save(persona);
+        return persona;
     }
 
     @GetMapping("/personas")

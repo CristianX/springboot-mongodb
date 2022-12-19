@@ -3,6 +3,8 @@ package com.example.apimongodb.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.apimongodb.utils.WSPersonas;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.apimongodb.model.Persona;
@@ -30,5 +32,14 @@ public class PersonaService {
 
     public void deleteById(String id) {
         personaRepository.deleteById(id);
+    }
+
+    @Autowired
+    private WSPersonas consultaWebServices;
+
+    public Object obtenerDatosWSPersonas(String identificacion) {
+        var documentPersona = consultaWebServices.obtenerPersona(identificacion);
+        System.out.println( "DAVID:"+documentPersona);
+        return documentPersona;
     }
 }

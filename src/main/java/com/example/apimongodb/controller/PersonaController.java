@@ -23,20 +23,20 @@ public class PersonaController {
 
     private final PersonaService personaService;
 
-    @PostMapping("/personas")
-    public Persona save(@RequestBody Persona persona) {
-        personaService.save(persona);
-        return persona;
-    }
+    // @PostMapping("/save")
+    // public Persona save(@RequestBody Persona persona) {
+    // personaService.save(persona);
+    // return persona;
+    // }
 
-    @GetMapping("/personas")
+    @GetMapping("/all")
     public List<Persona> findAll() {
         return personaService.findAll();
     }
 
-    @GetMapping("/personas/{id}")
-    public Persona findById(@PathVariable String id) {
-        return personaService.findById(id).get();
+    @GetMapping("/informacion/{identificacion}")
+    public Persona findById(@PathVariable("identificacion") String identificacion) {
+        return personaService.findById(identificacion).get();
     }
 
     @DeleteMapping("/personas/{id}")
@@ -49,9 +49,10 @@ public class PersonaController {
         personaService.save(persona);
     }
 
-    @PostMapping("/pruebaCedula")
-    public Object buscarPersona(){
-        var documentPersona = personaService.obtenerDatosWSPersonas("1804778023");
+    @GetMapping(path = "/informacion/{identificacion}", produces = "application/json")
+    public Object buscarPersona(@PathVariable("identificacion") String identificacion) {
+        var documentPersona = personaService.obtenerDatosWSPersonas(identificacion);
+        personaService.save(documentPersona);
         return documentPersona;
     }
 

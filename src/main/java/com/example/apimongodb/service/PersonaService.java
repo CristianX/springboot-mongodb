@@ -37,9 +37,9 @@ public class PersonaService {
     @Autowired
     private WSPersonas consultaWebServices;
 
-    public Object obtenerDatosWSPersonas(String identificacion) {
+    public Persona obtenerDatosWSPersonas(String identificacion) {
         var documentPersona = consultaWebServices.obtenerPersona(identificacion);
-        System.out.println( "DAVID:"+documentPersona);
+        System.out.println("DAVID:" + documentPersona);
         return documentPersona;
     }
 }

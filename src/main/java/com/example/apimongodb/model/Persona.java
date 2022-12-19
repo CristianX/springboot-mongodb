@@ -1,7 +1,12 @@
 package com.example.apimongodb.model;
 
-import org.springframework.data.annotation.Id;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 
 import lombok.Data;
 
@@ -9,12 +14,16 @@ import lombok.Data;
 @Data
 public class Persona {
 
-    @Id
-    private String id;
-    private String nombres;
-    private String apellidos;
-    private String email;
-    private Integer edad;
-    private Object data;
+    Map<String, Object> persona = new LinkedHashMap<>();
+
+    @JsonAnyGetter
+    public Map<String, Object> getPersona() {
+        return persona;
+    }
+
+    @JsonAnySetter
+    public void setPersona(String key, Object value) {
+        persona.put(key, value);
+    }
 
 }

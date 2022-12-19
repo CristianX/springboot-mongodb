@@ -24,8 +24,9 @@ public class PersonaController {
     private final PersonaService personaService;
 
     @PostMapping("/personas")
-    public void save(@RequestBody Persona persona) {
+    public Persona save(@RequestBody Persona persona) {
         personaService.save(persona);
+        return persona;
     }
 
     @GetMapping("/personas")
@@ -46,6 +47,12 @@ public class PersonaController {
     @PutMapping("/personas")
     public void update(@RequestBody Persona persona) {
         personaService.save(persona);
+    }
+
+    @PostMapping("/pruebaCedula")
+    public Object buscarPersona(){
+        var documentPersona = personaService.obtenerDatosWSPersonas("1804778023");
+        return documentPersona;
     }
 
 }

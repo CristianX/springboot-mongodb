@@ -23,18 +23,18 @@ public class PersonaController {
 
     private final PersonaService personaService;
 
-    // @PostMapping("/save")
-    // public Persona save(@RequestBody Persona persona) {
-    // personaService.save(persona);
-    // return persona;
-    // }
+    @PostMapping("/save")
+    public Persona save(@RequestBody Persona persona) {
+        personaService.save(persona);
+        return persona;
+    }
 
     @GetMapping("/all")
     public List<Persona> findAll() {
         return personaService.findAll();
     }
 
-    @GetMapping("/informacion/{identificacion}")
+    @GetMapping("/informacion-identificacion/{identificacion}")
     public Persona findById(@PathVariable("identificacion") String identificacion) {
         return personaService.findById(identificacion).get();
     }
@@ -52,7 +52,7 @@ public class PersonaController {
     @GetMapping(path = "/informacion/{identificacion}", produces = "application/json")
     public Object buscarPersona(@PathVariable("identificacion") String identificacion) {
         var documentPersona = personaService.obtenerDatosWSPersonas(identificacion);
-        personaService.save(documentPersona);
+        // personaService.save(documentPersona);
         return documentPersona;
     }
 

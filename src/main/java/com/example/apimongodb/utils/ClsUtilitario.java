@@ -5,10 +5,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClsUtilitario {
 
-    public String fichaGeneral(String identificacion){
+    public String fichaGeneral(String identificacion) {
         String ficha = String.format(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                        "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://servicio.interoperadorws.interoperacion.dinardap.gob.ec/\">\n" +
+                        "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\"http://servicio.interoperadorws.interoperacion.dinardap.gob.ec/\">\n"
+                        +
                         "   <soapenv:Header />\n" +
                         "   <soapenv:Body>\n" +
                         "      <ser:getFichaGeneral>\n" +
@@ -18,8 +19,8 @@ public class ClsUtilitario {
                         "         <numeroIdentificacion>%1$s</numeroIdentificacion>\n" +
                         "      </ser:getFichaGeneral>\n" +
                         "   </soapenv:Body>\n" +
-                        "</soapenv:Envelope>", identificacion
-        );
+                        "</soapenv:Envelope>",
+                identificacion);
         return ficha;
     }
 
@@ -79,4 +80,3 @@ public class ClsUtilitario {
     }
 
 }
-

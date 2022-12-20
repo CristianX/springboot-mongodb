@@ -3,6 +3,7 @@ package com.example.apimongodb.utils;
 import com.example.apimongodb.model.Persona;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -22,9 +23,9 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.List;
 
 @Component
 public class WSPersonas {
@@ -33,6 +34,8 @@ public class WSPersonas {
 
     @Autowired
     private ClsUtilitario clsUtilitario;
+
+    private ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Generar autentificacion basica
@@ -67,35 +70,30 @@ public class WSPersonas {
                     String.class);
 
             var rawXmlResponse = response.getBody();
+
             XmlMapper xmlMapper = new XmlMapper();
             JsonNode node = xmlMapper.readTree(rawXmlResponse.getBytes());
-            // node = node.get("Body").get("getFichaGeneralResponse").get("return");
-            node = node.get("Body");
 
-            RestTemplate restTemplate1 = new RestTemplate();
-            String urlString1 = "http://interoperabilidad.dinardap.gob.ec/interoperador-v2";
+            // ArrayNode arrayNode = mapper.createArrayNode().add(node);
 
-            var body1 = String.format(clsUtilitario.fichaGeneral1(identificacion));
+            ArrayNode arrayNode = mapper.createArrayNode();
+            arrayNode.addAll(Arrays.asList(node, node));
 
-            HttpHeaders headers1 = new HttpHeaders();
-            headers1.setAccept(Collections.singletonList(MediaType.APPLICATION_XML));
-            headers1.add("Content-type", "text/xml;charset=utf-8");
-            headers1.add("Authorization", getBasicAuthenticationHeader("InDrOmQdTa", "2QK@71PSp/eDcH"));
-            HttpEntity<String> response1 = restTemplate1.exchange(
-                    urlString1,
-                    HttpMethod.POST,
-                    new HttpEntity<Object>(body1, headers1),
-                    String.class);
+            JsonNode jsonNode = mapper.readTree(arrayNode.toString());
 
-            var rawXmlResponse1 = response.getBody();
-            XmlMapper xmlMapper1 = new XmlMapper();
-            JsonNode node1 = xmlMapper1.readTree(rawXmlResponse.getBytes());
-            // node = node.get("Body").get("getFichaGeneralResponse").get("return");
-            node1 = node1.get("Body");
+            System.out.println("DATOSSSSSS Devueltos así bien chevere:" + arrayNode);
+            System.out.println("DATOSSSSSS 2:" + jsonNode);
 
+            // Agragar el nodo de tipo persona
             Persona persona = new Persona();
             persona = xmlMapper.treeToValue(node, Persona.class);
             persona.setIdentificacion(identificacion);
+            System.out.println("DATOSSSSSS:" + persona);
+            // ObjectMapper jsonMapper = new ObjectMapper();
+            // String json = jsonMapper.writeValueAsString(node);
+
+            // document = stringAXml(rawXmlResponse);
+            // document.getDocumentElement().normalize();
             return persona;
         } catch (Exception e) {
             return null;
@@ -113,8 +111,4 @@ public class WSPersonas {
         }
         return xmlDocument;
     }
-
-    public static JsonNode merge(JsonNode mainNode, JsonNode updateNode) { Iterator<String> fieldNames = updateNode.fieldNames(); while (fieldNames.hasNext()) { String fieldName = fieldNames.next(); JsonNode jsonNode = mainNode.get(fieldName); // if field exists and is an embedded object if (jsonNode != null && jsonNode.isObject()) { merge(jsonNode, updateNode.get(fieldName)); } else { if (mainNode instanceof ObjectNode) { // Overwrite field JsonNode value = updateNode.get(fieldName); ((ObjectNode) mainNode).put(fieldName, value); } } } return mainNode; }
-
-
 }

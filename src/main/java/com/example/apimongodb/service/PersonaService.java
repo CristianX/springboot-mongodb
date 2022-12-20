@@ -7,6 +7,7 @@ import com.example.apimongodb.utils.WSPersonas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.apimongodb.model.Informacion;
 import com.example.apimongodb.model.Persona;
 import com.example.apimongodb.repository.PersonaRepository;
 
@@ -18,15 +19,15 @@ public class PersonaService {
 
     private final PersonaRepository personaRepository;
 
-    public void save(Persona persona) {
+    public void save(Informacion persona) {
         personaRepository.save(persona);
     }
 
-    public List<Persona> findAll() {
+    public List<Informacion> findAll() {
         return personaRepository.findAll();
     }
 
-    public Optional<Persona> findById(String id) {
+    public Optional<Informacion> findById(String id) {
         return personaRepository.findById(id);
     }
 
@@ -37,7 +38,7 @@ public class PersonaService {
     @Autowired
     private WSPersonas consultaWebServices;
 
-    public Persona obtenerDatosWSPersonas(String identificacion) {
+    public Informacion obtenerDatosWSPersonas(String identificacion) {
         var documentPersona = consultaWebServices.obtenerPersona(identificacion);
         System.out.println("DAVID:" + documentPersona);
         return documentPersona;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.apimongodb.model.Informacion;
 import com.example.apimongodb.model.Persona;
 import com.example.apimongodb.service.PersonaService;
 
@@ -24,11 +25,12 @@ public class PersonaController {
     private final PersonaService personaService;
 
     @PostMapping("/save")
-    public Persona save(@RequestBody Persona persona) {
+    public Informacion save(@RequestBody Informacion persona) {
         personaService.save(persona);
         return persona;
     }
 
+    /* 
     @GetMapping("/all")
     public List<Persona> findAll() {
         return personaService.findAll();
@@ -47,12 +49,12 @@ public class PersonaController {
     @PutMapping("/personas")
     public void update(@RequestBody Persona persona) {
         personaService.save(persona);
-    }
+    } */
 
     @GetMapping(path = "/informacion/{identificacion}", produces = "application/json")
     public Object buscarPersona(@PathVariable("identificacion") String identificacion) {
         var documentPersona = personaService.obtenerDatosWSPersonas(identificacion);
-        // personaService.save(documentPersona);
+        personaService.save(documentPersona);
         return documentPersona;
     }
 

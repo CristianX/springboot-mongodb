@@ -24,6 +24,37 @@ public class ClsUtilitario {
         return ficha;
     }
 
+    public String fichaGeneral1(String identificacion) {
+        String ficha = String.format(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
+                +"\n<soapenv:Envelope"
+                +"\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:int=\"http://interoperabilidad.dinardap.gob.ec/interoperador/\">"
+                +"\n    <soapenv:Header />"
+                +"\n    <soapenv:Body>"
+                +"\n        <int:consultar>"
+                +"\n            <!--Optional:-->"
+                +"\n            <parametros>"
+                +"\n                <!--Zero or more repetitions:-->"
+                +"\n                <parametro>"
+                +"\n                    <!--Optional:-->"
+                +"\n                    <nombre>codigoPaquete</nombre>"
+                +"\n                    <!--Optional:-->"
+                +"\n                    <valor>1098</valor>"
+                +"\n                </parametro>"
+                +"\n                <parametro>"
+                +"\n                    <!--Optional:-->"
+                +"\n                    <nombre>cedula</nombre>"
+                +"\n                    <!--Optional: 1102703426-->"
+                +"\n                    <valor>%1$s</valor>"
+                +"\n                </parametro>"
+                +"\n            </parametros>"
+                +"\n        </int:consultar>"
+                +"\n    </soapenv:Body>"
+                +"\n</soapenv:Envelope>",
+                identificacion);
+        return ficha;
+    }
+
     public String cabeceraPersonasGenerica() {
 
         String cabecera = String.format(

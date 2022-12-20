@@ -11,12 +11,12 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 
 import lombok.Data;
 
-@Document(value = "Informacion")
+
 @Data
 public class Persona {
 
-    @Id
-    private String identificacion;
+    /* @Id
+    private String identificacion; */
 
     Map<String, Object> persona = new LinkedHashMap<>();
 

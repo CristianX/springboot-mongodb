@@ -1,5 +1,6 @@
 package com.example.apimongodb.utils;
 
+import com.example.apimongodb.model.Informacion;
 import com.example.apimongodb.model.Persona;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,9 +24,11 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class WSPersonas {
@@ -49,7 +52,7 @@ public class WSPersonas {
         return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
     }
 
-    public Persona obtenerPersona(String identificacion) {
+    public Informacion obtenerPersona(String identificacion) {
 
         Document document = null;
         try {
@@ -74,27 +77,58 @@ public class WSPersonas {
             XmlMapper xmlMapper = new XmlMapper();
             JsonNode node = xmlMapper.readTree(rawXmlResponse.getBytes());
 
+
+            RestTemplate restTemplate1 = new RestTemplate();
+            String urlString1 = "http://interoperabilidad.dinardap.gob.ec/interoperador-v2";
+
+            var body1 = String.format(clsUtilitario.fichaGeneral1(identificacion));
+
+            HttpHeaders headers1 = new HttpHeaders();
+            headers1.setAccept(Collections.singletonList(MediaType.APPLICATION_XML));
+            headers1.add("Content-type", "text/xml;charset=utf-8");
+            headers1.add("Authorization", getBasicAuthenticationHeader("InDrOmQdTa", "2QK@71PSp/eDcH"));
+            HttpEntity<String> response1 = restTemplate1.exchange(
+                    urlString1,
+                    HttpMethod.POST,
+                    new HttpEntity<Object>(body1, headers1),
+                    String.class);
+
+            var rawXmlResponse1 = response1.getBody();
+
+            XmlMapper xmlMapper1 = new XmlMapper();
+            JsonNode node1 = xmlMapper1.readTree(rawXmlResponse1.getBytes());
+
+            
+
+
+
             // ArrayNode arrayNode = mapper.createArrayNode().add(node);
-
+            
             ArrayNode arrayNode = mapper.createArrayNode();
-            arrayNode.addAll(Arrays.asList(node, node));
-
-            JsonNode jsonNode = mapper.readTree(arrayNode.toString());
-
+            arrayNode.addAll(Arrays.asList(node, node1));
             System.out.println("DATOSSSSSS Devueltos así bien chevere:" + arrayNode);
-            System.out.println("DATOSSSSSS 2:" + jsonNode);
 
             // Agragar el nodo de tipo persona
             Persona persona = new Persona();
+            Persona persona1 = new Persona();
+            List<Persona> personaList = new ArrayList();
             persona = xmlMapper.treeToValue(node, Persona.class);
-            persona.setIdentificacion(identificacion);
+            persona1 = xmlMapper.treeToValue(node1, Persona.class);
+            personaList.add(persona);
+            personaList.add(persona1);
+            //persona = xmlMapper.treeToValue(arrayNode, Persona.class);
+            Informacion informacion = new Informacion();
+            //informacion = xmlMapper.treeToValue(arrayNode, Informacion.class);
+            informacion.setPersona(personaList);
+            informacion.setIdentificacion(identificacion);
+            /* persona.setIdentificacion(identificacion); */
             System.out.println("DATOSSSSSS:" + persona);
             // ObjectMapper jsonMapper = new ObjectMapper();
             // String json = jsonMapper.writeValueAsString(node);
 
             // document = stringAXml(rawXmlResponse);
             // document.getDocumentElement().normalize();
-            return persona;
+            return informacion;
         } catch (Exception e) {
             return null;
         }

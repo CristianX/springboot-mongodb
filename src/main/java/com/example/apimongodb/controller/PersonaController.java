@@ -30,14 +30,28 @@ public class PersonaController {
         return persona;
     }
 
-    /* 
     @GetMapping("/all")
-    public List<Persona> findAll() {
+    public List<Informacion> findAll() {
         return personaService.findAll();
     }
 
+    @GetMapping("/informacion-identificacion-buscar-crear/{identificacion}")
+    public Informacion findByIdIfFalseCreate(@PathVariable("identificacion") String identificacion) {
+        try {
+            var existe = personaService.findById(identificacion).get();
+            System.out.println("Existe el documento");
+            return existe;
+        } catch (Exception e) {
+            System.out.println("No existe el documento");
+            var documentPersona = personaService.obtenerDatosWSPersonas(identificacion);
+            personaService.save(documentPersona);
+            return documentPersona;
+        }
+
+    }
+
     @GetMapping("/informacion-identificacion/{identificacion}")
-    public Persona findById(@PathVariable("identificacion") String identificacion) {
+    public Informacion findById(@PathVariable("identificacion") String identificacion) {
         return personaService.findById(identificacion).get();
     }
 
@@ -45,11 +59,12 @@ public class PersonaController {
     public void deleteById(@PathVariable String id) {
         personaService.deleteById(id);
     }
-
-    @PutMapping("/personas")
-    public void update(@RequestBody Persona persona) {
-        personaService.save(persona);
-    } */
+    /*
+     * @PutMapping("/personas")
+     * public void update(@RequestBody Persona persona) {
+     * personaService.save(persona);
+     * }
+     */
 
     @GetMapping(path = "/informacion/{identificacion}", produces = "application/json")
     public Object buscarPersona(@PathVariable("identificacion") String identificacion) {
